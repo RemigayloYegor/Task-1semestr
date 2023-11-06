@@ -1,6 +1,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 /**
  * @brief Функция расчета формулы
  * @param x,y,z значения параметров
