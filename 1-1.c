@@ -16,7 +16,7 @@ double FunctionA(double x, double y, double z);
 double FunctionB(double x, double y, double z);
 
 int main() {
-  double x = 0.29, y = 3.7, z = -1;
+  const double x = 0.29, y = 3.7, z = -1;
   printf("x = %4.2f\n y = %4.2f\n z = %4.2f\n", x, y, z);
   printf("a = %f\n b = %f\n", FunctionA(x, y, z), FunctionB(x, y, z));
 }
