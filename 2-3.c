@@ -5,7 +5,6 @@
 /**
  * @brief функция написана, чтобы пользователи вводили значение и проверять его
  * на то, что он является числом
- * @param  нет
  * @return введеное значения пользователя
  */
 float fun_scan();
@@ -40,12 +39,11 @@ float fun_variable(int variable, float corner) {
 }
 
 float fun_scan() {
-  float corner;
-  int a;
-  a = scanf("%f", &corner);
-  if (a != 1) {
+  int result;
+  float get;
+  result = scanf("%f", &get);
+  if (result != 1) {
     abort();
-  } else {
-    return corner;
   }
+  return get;
 }
