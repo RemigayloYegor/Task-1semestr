@@ -43,25 +43,18 @@ double fun_scan() {
   result = scanf("%lf", &get);
   if (result != 1) {
     abort();
-  } else {
-    return get;
   }
+  return get;
 }
 
 double fun_degrees(double corner) {
-  double degrees;
-  degrees = corner * 180 / M_PI;
-  return degrees;
+  return corner * 180 / M_PI;
 }
 
 double fun_minutes(double corner) {
-  double minutes;
-  minutes = corner * (60 * 180) / M_PI;
-  return minutes;
+  return corner * (60 * 180) / M_PI;
 }
 
 double fun_seconds(double corner) {
-  double seconds;
-  seconds = corner * (3600 * 180) / M_PI;
-  return seconds;
+  return corner * (3600 * 180) / M_PI;
 }
