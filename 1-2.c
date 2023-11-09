@@ -5,7 +5,6 @@
 /**
  * @brief функция написана, чтобы пользователи вводили значение и проверять его
  * на то, что он является числом
- * @param  нет
  * @return введеное значения пользователя
  */
 double fun_scan();
@@ -39,15 +38,14 @@ int main() {
 }
 
 double fun_scan() {
-  int a;
-  double b;
-  a = scanf("%lf", &b);
-  if (a != 1) {
+  int result;
+  double get;
+  result = scanf("%lf", &get);
+  if (result != 1) {
     abort();
   } else {
-    return b;
+    return get;
   }
-  return 0;
 }
 
 double fun_degrees(double corner) {
