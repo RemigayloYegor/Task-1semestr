@@ -27,7 +27,8 @@ double fun_minutes(double corner);
  */
 double fun_seconds(double corner);
 
-int main() {
+int main()
+{
   double seconds, corner, minutes, degrees;
   corner = fun_scan();
   degrees = fun_degrees(corner);
@@ -48,13 +49,16 @@ double fun_scan() {
 }
 
 double fun_degrees(double corner) {
-  return corner * 180 / M_PI;
+  const double corner2 = 180 / M_PI;
+  return corner * corner2;
 }
 
 double fun_minutes(double corner) {
-  return corner * (60 * 180) / M_PI;
+  const double corner2 = (60 * 180) / M_PI;
+  return corner * corner2;
 }
 
 double fun_seconds(double corner) {
-  return corner * (3600 * 180) / M_PI;
+  const double corner2 = (3600 * 180) / M_PI;
+  return corner * corner2;
 }
