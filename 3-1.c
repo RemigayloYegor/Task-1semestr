@@ -1,3 +1,4 @@
+#include <float.h>
 #include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -8,7 +9,7 @@
  * на то, что он является числом
  * @return введеное значения пользователя
  */
-float fun_scan();
+float scan_f();
 
 /**
  * @brief Считает уравнение с проверкой истиности fun_check и выводит итоговое
@@ -25,12 +26,15 @@ float fun_example(float x);
  */
 bool fun_check(float x);
 
-int main() {
-  float d_x, x, x_max;
-  x = fun_scan();
-  x_max = fun_scan();
-  d_x = fun_scan();
-  while (x <= x_max) {
+/**
+ * @brief точка входа в программу
+ * @return код ошибки (0 - успех)
+ */
+int main()
+{
+  float d_x = scan_f(), x = scan_f(), x_max = scan_f();
+  while (x - x_max <= DBL_EPSILON) 
+  {
     fun_example(x);
     x = x + d_x;
   }
@@ -38,30 +42,30 @@ int main() {
 }
 
 float fun_example(float x) {
-  float example;
-  if (fun_check(x) == true) {
-    example = 3 * sin(sqrtf(x)) + 0.39 * x - 3.8;
-    printf("%f\n", example);
+  if (fun_check(x) == true)
+  {
+    printf("%f\n", 3 * sin(sqrtf(x)) + 0.39 * x - 3.8);
   } else {
     printf("%f %s\n", x, "Решение отстутствует");
   }
   return 0;
 }
 
-float fun_scan() {
-  int a;
-  float ret;
-  a = scanf("%f", &ret);
-  if (a != 1) {
+float scan_f() {
+  int result;
+  float get;
+  result = scanf("%f", &get);
+  if (result != 1) 
+  {
     abort();
   }
-  return ret;
+  return get;
 }
 
 bool fun_check(float x) {
-  if (x < 0) {
+  if (x < DBL_EPSILON)
+  {
     return false;
-  } else {
-    return true;
   }
+  return true;
 }
