@@ -17,7 +17,6 @@ float scan_f();
  * @param x - текущее значение числа в диапазоне
  * @param d_x - значение шага в диапазоне
  * @param x_max - максимальное значение в диапазоне
- * @return ничего
  */
 float Example(float x, float d_x, float x_max);
 
