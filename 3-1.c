@@ -12,19 +12,23 @@
 float scan_f();
 
 /**
- * @brief Считает уравнение с проверкой истиности fun_check и выводит итоговое
+ * @brief Считает уравнение с проверкой истиности Check и выводит итоговое
  * значение уравнения или выводит Решение отсутствует и текущее значение х
- * @param x - значение числа в диапазоне
+ * @param x - текущее значение числа в диапазоне
+ * @param d_x - значение шага в диапазоне
+ * @param x_max - максимальное значение в диапазоне
  * @return ничего
  */
-float fun_example(float x);
+float Example(float x, float d_x, float x_max);
 
 /**
  * @brief Проверяет существующие значения х в данном уравнение
- * @param x - значение числа в диапазоне
+ * @param x - текущее значение числа в диапазоне
+ * @param d_x - значение шага в диапазоне
+ * @param x_max - максимальное значение в диапазоне
  * @return Если не существует значение х возращает false, иначе true
  */
-bool fun_check(float x);
+bool Check(float x, float d_x, float x_max);
 
 /**
  * @brief точка входа в программу
@@ -33,16 +37,17 @@ bool fun_check(float x);
 int main()
 {
   float d_x = scan_f(), x = scan_f(), x_max = scan_f();
-  while (x - x_max <= DBL_EPSILON) 
+  while (x - x_max < DBL_EPSILON) 
   {
-    fun_example(x);
+    Example(x, d_x, x_max);
     x = x + d_x;
   }
   return 0;
 }
 
-float fun_example(float x) {
-  if (fun_check(x) == true)
+float Example(float x, float d_x, float x_max)
+{
+  if (Check(x, d_x, x_max) == true)
   {
     printf("%f\n", 3 * sin(sqrtf(x)) + 0.39 * x - 3.8);
   } else {
@@ -51,7 +56,8 @@ float fun_example(float x) {
   return 0;
 }
 
-float scan_f() {
+float scan_f()
+{
   int result;
   float get;
   result = scanf("%f", &get);
@@ -62,8 +68,9 @@ float scan_f() {
   return get;
 }
 
-bool fun_check(float x) {
-  if (x < DBL_EPSILON)
+bool Check(float x, float d_x, float x_max)
+{
+  if (x < DBL_EPSILON || d_x < DBL_EPSILON || x - x_max > -DBL_EPSILON)
   {
     return false;
   }
