@@ -13,12 +13,32 @@
 double scan_f();
 
 /**
- * @brief Проверяет в какой из дипазон входит значение и решает уравнение к
- * этому дипазону
+ * @brief Проверяет существование х 
  * @param х - переменная, которую ввел пользователь
- * @return возвращает значение уравнения, которое считало
+ * @return возвращает true or false
  */
-double func_check(double x);
+bool func_check(double x);
+
+/**
+ * @brief Вычисляет значение для 1 условия
+ * @param х - переменная, которую ввел пользователь
+ * @return возвращает вычисление для 1 условия
+ */
+double get_result1(double x);
+
+/**
+ * @brief Вычисляет значение для 2 условия
+ * @param х - переменная, которую ввел пользователь
+ * @return возвращает вычисление для 2 условия
+ */
+double get_result2(double x);
+
+/**
+ * @brief Вычисляет значение для 3 условия
+ * @param х - переменная, которую ввел пользователь
+ * @return возвращает вычисление для 3 условия
+ */
+double get_result3(double x);
 
 /**
  * @brief точка входа в программу
@@ -27,27 +47,69 @@ double func_check(double x);
 int main() 
 {
   double x = scan_f();
-  printf("%lf", func_check(x));
+  const double value = 1.2;
+
+
+  double result;
+  if (fabs(x - value) <= DBL_EPSILON) 
+  {
+      result = get_result2(x);
+  } 
+  else 
+    if (x - value > -DBL_EPSILON) 
+    {
+      result = get_result1(x);
+    } 
+    else 
+      {
+        if (func_check(x))
+        {
+          result = get_result3(x);
+        }
+        else
+        {
+          printf("%s", "Function not exist ");
+          return 1;
+        }
+      }
+  
+    printf("%s %lf", "Result is ", result);
   return 0;
 }
 
-double func_check(double x) {
-  double a = 1.1;
-  if (x - 1.2 == DBL_EPSILON) {
-    return 3;
-  } else if (x - 1.2 > -DBL_EPSILON) {
-    return log10(x) * M_PI;
-  } else if (x - 1.2 < DBL_EPSILON) {
-    return (cos(pow(x, 2)) / sin(pow(x, 2))) + a * pow(x, 2) / 2;
+bool func_check(double x) 
+{
+  if (fabs(sin(pow(x,2)))<=DBL_EPSILON)
+  {
+    return false;
   }
+  return true;
 }
 
-double scan_f() {
-  int result;
-  double get;
-  result = scanf("%lf", &get);
-  if (result != 1) {
+double scan_f() 
+{
+  double value;
+  int result = scanf("%lf", &value);
+  if (result != 1) 
+  {
+    printf("%s", "error");
     abort();
   }
-  return get;
+  return value;
+}
+
+double get_result1(double x)
+{
+  return log10(x) * M_PI;
+}
+
+double get_result2(double x)
+{
+  return 3;
+}
+
+double get_result3(double x)
+{
+  const double a = 1.1;
+  return (cos(pow(x, 2)) / sin(pow(x, 2))) + a * pow(x, 2) / 2;
 }
