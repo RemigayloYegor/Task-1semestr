@@ -21,14 +21,18 @@ float scan_f(const char* const message);
 float Example(float x, float d_x, float x_max);
 
 /**
- * @brief Проверяет существующие значения х в данном уравнение
+ * @brief Проверяет существование всех аргументов
  * @param x - текущее значение числа в диапазоне
  * @param d_x - значение шага в диапазоне
  * @param x_max - максимальное значение в диапазоне
- * @return Если не существует значение х возращает false, иначе true
+ * @return true или выкидывает из программы
  */
 bool CheckArguments(float x, float d_x, float x_max);
-
+/**
+ * @brief Проверяет существование х для уравнения
+ * @param x - текущее значение числа в диапазоне
+ * @return Если не существует значение х возращает false, иначе true
+ */
 bool CheckFunction(float x);
 
 /**
