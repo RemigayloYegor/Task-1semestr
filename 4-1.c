@@ -2,6 +2,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <time.h>
+#include <malloc.h>
 #include <math.h>
 /**
  * @brief Функция присваивает целочисленное значение переменной
@@ -22,7 +23,7 @@ int* get_array(const int size);
 */
 void FillArrayUser(int* const array, const size_t size);
 /**
- * @brief Функция заполняет массив рандомными числами в диапазоне [-30:70]
+ * @brief Функция заполняет массив рандомными числами в диапазоне [begin : end]
  * @param array указатель на заполняемый массив
  * @param size длина массива
 */
@@ -39,12 +40,19 @@ size_t get_size();
 */
 void print_array(const int* const  array, const size_t size);
 /**
+ * @brief Функция копирующая элементы одного массива в другой
+ * @param Current исходный массив
+ * @param Copy пустой массив
+ * @param size длина массива
+*/
+void copy_array(int* const Current, int* Copy, const size_t size);
+/**
  * @brief Функция меняет предпоследний элемент массива на максимальный по модулю.
  * @param array указатель на массив
  * @param size размерность массива
  * @return результат
 */
-int task1(int* array, const size_t size);
+int *task1(int* array, const size_t size);
 /**
  * @brief Фунция находит количество тех элементов, значения которых делятся на заданное число N без остатка.
  * @param array указатель на массив
@@ -96,8 +104,7 @@ int main()
           puts("Insert a valid choice!\n");
           return 1;
   }
-  task1(Array, size);
-  print_array(Array, size);
+  print_array(task1(Array, size), size);
   printf("Second task: %d\n", task2(Array, size));
   printf("third task: %d\n", task3(Array, size));
   free_array(Array);
@@ -133,7 +140,7 @@ size_t get_size()
 
 int* get_array(const int size)
 {
-  void* array = malloc(size * sizeof(int));
+  int* array = malloc(size * sizeof(int));
   if (NULL == array)
   {
       errno = ENOMEM;
@@ -152,13 +159,14 @@ void FillArrayUser(int* const array, const size_t size)
     }
 }
 
-void FillArrayRandom(int* const array, const size_t size)
+void FillArrayRandom(int *const array, const size_t size) 
 {
-    puts("Введите элементы массива: ");
-    for (size_t i = 0; i < size; i++)
-    {
-        array[i] = -30 + rand() % 101;          
-    }
+  int begin = scan_f("Введите нижнюю границу диапазона: "), 
+      end = scan_f("Введите верхнюю границу диапазона: ");
+  for (size_t i = 0; i < size; i++)
+  {
+    array[i] = begin + rand() % (end - begin + 1);
+  }
 }
 
 void print_array(const int* const  array, const size_t size)
@@ -170,24 +178,34 @@ void print_array(const int* const  array, const size_t size)
     }
 }
 
-int task1( int* array, const size_t size)
+void copy_array(int* const Current, int* Copy, const size_t size)
+{
+    for (size_t i = 0; i < size; i++)
+    {
+          Copy[i] = Current[i];
+    }
+}
+
+int *task1( int* array, const size_t size)
 {
    int temp = 0;
-   for (int i = 0; i < size; i = i + 1)
+   for (size_t i = 0; i < size; i = i + 1)
      {
        if (abs(array[i]) > temp)
        {
          temp = array[i];
        }
      }
-   array[size - 2] = temp;
-  return 0;
+  int* new_array = get_array(size);
+  copy_array(array, new_array, size);
+  new_array[size - 2] = temp;
+  return new_array;
 }
 
 int task2(const int* const array, const size_t size)
 {
   int temp = 0, number = scan_f("Введите число на которое должно делится без остатка: ");
-  for (int i = 0; i < size; i = i + 1) 
+  for (size_t i = 0; i < size; i = i + 1) 
   {
     if (array[i] % number == 0)
     {
@@ -200,7 +218,7 @@ int task2(const int* const array, const size_t size)
 int task3(const int* const array, const size_t size)
 {
   int temp = 0, k = 0;
-  for (int i = 0; i < size && size >= 2; i++) 
+  for (size_t i = 0; i < size - 1 && size >= 2; i++) 
   {
     if ((array[i] >= 0 && array[i + 1] < 0 ) || (array[i] < 0 && array[i + 1] >= 0)) 
     {
@@ -213,11 +231,8 @@ int task3(const int* const array, const size_t size)
   {
     printf("%s\n", "Число для 3 задания не найдено");
     abort();
-  } 
-  else
-  {
-      return temp;
   }
+  return temp;
 }
 
 void free_array(int* array)
