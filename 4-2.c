@@ -1,117 +1,275 @@
-#include <math.h>
 #include <stdio.h>
+#include <errno.h>
 #include <stdlib.h>
 #include <time.h>
-
-int fun_scan();
-
-int arr_add_1(int n);
-
-int arr_add_2(int n);
-
-int arr_add_choice(int n);
-
-int fun_replaceElement(int arr_int[], int n);
-
-int fun_replaceEven(int arr_int[], int n);
-
-int fun_new_arr(int arr_int[], int n);
-
-int main() {
-  srand(time(NULL));
-  int n, arr_int[n];
-  printf("%s\n", "Введите количество символов. ");
-  n = fun_scan();
-  arr_int[n] = arr_add_choice(n);
+#include <malloc.h>
+#include <math.h>
+/**
+ * @brief Функция присваивает целочисленное значение переменной
+ * @param - сообщение для пользователя
+ * @return целочисленная цифра
+*/
+int scan_f(const char* const message);
+/**
+ * @brief Функция выделяет память под массив
+ * @param size длина массива
+ * @return array указатель на пустой массив
+*/
+int* get_array(const int size);
+/**
+ * @brief Функция заполняет массив, которые вводит пользователь
+ * @param array указатель на заполняемый массив
+ * @param size длина массива
+*/
+void FillArrayUser(int* const array, const size_t size);
+/**
+ * @brief Функция заполняет массив рандомными числами в диапазоне [begin : end]
+ * @param array указатель на заполняемый массив
+ * @param size длина массива
+*/
+void FillArrayRandom(int* const array, const size_t size);
+/**
+ * @brief Функция присваивает переменной целочисленное значение и проверяет его на положителность
+ * @return number положительное число
+*/
+size_t get_size();
+/**
+ * @brief Функция выводит массив на экран
+ * @param array указатель на заполняемый массив
+ * @param size длина массива
+*/
+void print_array(const int* const  array, const size_t size);
+/**
+ * @brief Функция копирующая элементы одного массива в другой
+ * @param Current исходный массив
+ * @param Copy пустой массив
+ * @param size длина массива
+*/
+void copy_array(int* const Current, int* Copy, const size_t size);
+/**
+ * @brief Функция считаетс колличество четных элементов, оканчивающихся на ноль в массиве
+ * @param array указатель на массив
+ * @param size размерность массива
+ * @return колличество четных элементов
+*/
+int EvenNumbers(int* const array, const size_t size);
+/**
+ * @brief Функция меняет предпоследний элемент массива на максимальный по модулю.
+ * @param array указатель на массив
+ * @param size размерность массива
+ * @return результат
+*/
+int *task1(int* array, const size_t size);
+/**
+ * @brief Фунция находит количество тех элементов, значения которых делятся на заданное число N без остатка.
+ * @param array указатель на массив
+ * @param size размерность массива
+ * @return 0
+*/
+int *task2(int* array, size_t size);
+/**
+ * @brief Функция находит номер первой пары соседних элементов с разными знаками.
+ * @param array указатель на массив
+ * @param size размерность массива
+ * @return Итоговый ответ для третьего задания
+*/
+int *task3(int* array, const size_t size);
+/**
+ * @brief Функция, освобождающая массив
+ * @param array указатель на массив
+*/
+void free_array(int* array);
+/**
+ * @brief структура хранит константы, указывающие выбор пользователя заполнить массив
+ * @brief User хранит значение, вызывающее ввод массива вручную
+ * @brief Random хранит значение, вызывающее ввод массива случайными числами
+*/
+enum Choices
+{
+    User = 1,
+    Random = 2
+};
+/**
+ * @brief точка входа в программу
+ * @return код ошибки (0 - успех)
+ */
+int main() 
+{
+  srand(time(NULL)); 
+  size_t size = get_size(); 
+  int *Array = get_array(size);
+  int choice = scan_f("Выберите способ заполнения массива\n 1. Вручную, 2. Автозаполнение\n");
+  switch ((enum Choices)choice)
+  {
+      case User:
+              FillArrayUser(Array, size);
+          break;
+      case Random:
+              FillArrayRandom(Array, size);
+          break;
+      default:
+          puts("Insert a valid choice!\n");
+          return 1;
+  }
+  puts("Исходный массив:");
+  print_array(Array, size);
+  print_array(task1(Array, size), size);
+  print_array(task2(Array, size), size + EvenNumbers(Array, size));
+  print_array(task3(Array, size), size);
+  free_array(Array);
   return 0;
 }
 
-int arr_add_1(int n) {
-  int arr_int[n];
-  for (int i = 0; i < n; i++) {
-    arr_int[i] = -30 + rand() % 101;
-  }
-  arr_int[n - 1] = fun_replaceElement(arr_int, n);
-  fun_replaceEven(arr_int, n);
-  fun_new_arr(arr_int, n);
-  return 0;
+int scan_f(const char* const message)
+{
+    int value = 0;
+    printf("%s", message);
+    int result = scanf("%d", &value);
+    if (result != 1)
+    {
+        errno = EIO;
+        perror("Error :");
+        abort();
+    }
+    return value;
 }
 
-int arr_add_2(int n) {
-  int arr_int[n];
-  for (int i = 0; i < n; i++) {
-    arr_int[i] = fun_scan();
-  }
-  arr_int[n - 1] = fun_replaceElement(arr_int, n);
-  fun_replaceEven(arr_int, n);
-  fun_new_arr(arr_int, n);
-  return 0;
+size_t get_size()
+{
+   int size =  scan_f("Введите размер массива: ");
+   if (size <= 0)
+   {
+       errno = ERANGE;
+       perror("Error :");
+       abort();
+   }
+
+   return (size_t)size;
 }
 
-int arr_add_choice(int n) {
-  int choice;
-  printf(
-      "%s\n",
-      "Заполнение массива автоматически - 1. Заполнение массива вручную - 2. ");
-  choice = fun_scan();
-  if (choice == 1) {
-    return arr_add_1(n);
-  } else if (choice == 2) {
-    return arr_add_2(n);
-  } else {
-    abort();
+int* get_array(const int size)
+{
+  int* array = malloc(size * sizeof(int));
+  if (NULL == array)
+  {
+      errno = ENOMEM;
+      perror("Error :");
+      abort();
+  }
+  return array;
+}
+
+void FillArrayUser(int* const array, const size_t size)
+{
+    puts("Введите элементы массива: ");
+    for (size_t i = 0; i < size; i++)
+    {
+        array[i] = scan_f("Введите элемент = ");           
+    }
+}
+
+void FillArrayRandom(int *const array, const size_t size) 
+{
+  int begin = scan_f("Введите нижнюю границу диапазона: "), 
+      end = scan_f("Введите верхнюю границу диапазона: ");
+  for (size_t i = 0; i < size; i++)
+  {
+    array[i] = begin + rand() % (end - begin + 1);
   }
 }
 
-int fun_replaceElement(int arr_int[], int n) {
-  int temp = 0;
-  for (int i = 0; i < n; i++) {
-    if (abs(arr_int[i]) > temp) {
-      temp = arr_int[i];
+void print_array(const int* const  array, const size_t size)
+{
+    for(size_t i = 0; i < size; i++)
+    {
+        printf("Элемент %zu = %d\n", i, array[i]);
+    }
+}
+
+int EvenNumbers(int* const array, const size_t size)
+{
+  int count = 0;
+  for (size_t i = 0; i < size; i++)
+  {
+    if(array[i] % 10 == 0)
+    {
+      count++;
     }
   }
-  arr_int[n - 1] = temp;
-  printf("%s - %d\n", "1. Предпоследнее число из массива", temp);
-  return temp;
+  return count;
 }
 
-int fun_replaceEven(int arr_int[], int n) {
-  int number;
-  printf("%s\n", "Введите число, которое должно стоять после всех четных "
-                 "оканчивающихся на ноль");
-  number = fun_scan();
-  printf("%s\n", "Task2");
-  for (int i = 0; i < n; i++) {
-    if (arr_int[i] % 10 == 0) {
-      printf("%d\t", arr_int[i]);
-      printf("%d\t", number);
-    } else {
-      printf("%d\t", arr_int[i]);
+
+void copy_array(int* const Current, int* Copy, const size_t size)
+{
+    for (size_t i = 0; i < size; i++)
+    {
+          Copy[i] = Current[i];
+    }
+}
+
+int *task1( int* array, const size_t size)
+{
+   puts("Массив для Задания 1:");
+   int temp = 0;
+   for (size_t i = 0; i < size; i = i + 1)
+     {
+       if (abs(array[i]) > temp)
+       {
+         temp = array[i];
+       }
+     }
+  int* new_array = get_array(size);
+  copy_array(array, new_array, size);
+  new_array[size - 2] = temp;
+  return new_array;
+}
+
+int *task2(int* array, size_t size)
+{
+  int k = 0, CountEven = EvenNumbers(array, size), number = scan_f("Введите число которое нужно вставить после всех четных элементов, оканчивающихся на ноль: ");
+  puts("Массив для Задания 2:");
+  int* new_array = get_array(size + CountEven);
+  for (size_t i = 0; k < size + CountEven; i = i + 1) 
+  {
+    if (array[i] % 10 == 0)
+    {
+      new_array[k] = array[i];
+      new_array[k + 1] = number;
+      k = k + 2;
+    }
+    else
+    {
+      new_array[k] = array[i];
+      k = k + 1;
     }
   }
-  return 0;
+  return new_array;
 }
 
-int fun_new_arr(int arr_int[], int n) {
-  printf("\n%s\n", "Task3");
-  int temp = 0, arr_new[n];
-  for (int i = 0; i < n; i++) {
-    if (i == 0 || i == n - 1) {
-      printf("%d\t", 0);
-    } else {
-      temp = arr_int[i] * pow(i, 2);
-      printf("%d\t", temp);
+int *task3(int* array, const size_t size)
+{
+  puts("Массив для Задания 3:");
+  int* new_array = get_array(size);
+  int temp = 0, k = 0;
+  for (size_t i = 0; i < size; i++) 
+  {
+    if (i == 0 || i == size-1) 
+    {
+      new_array[i] = 0;
+    }
+    else 
+    {
+      new_array[i] = array[i] * i * i;
     }
   }
-  return 0;
+  return new_array;
 }
 
-int fun_scan() {
-  int a;
-  int ret;
-  a = scanf("%d", &ret);
-  if (a != 1) {
-    abort();
-  }
-  return ret;
+void free_array(int* array)
+{
+    if (NULL != array)
+    {
+        free(array);
+    }
 }
