@@ -181,7 +181,6 @@ bool CheckRange(const int* const begin, const int* const end)
   if (begin > end)
   {
     return false;
-    abort();
   }
   return true;
 }
