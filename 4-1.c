@@ -4,6 +4,7 @@
 #include <time.h>
 #include <malloc.h>
 #include <math.h>
+#include <stdbool.h>
 /**
  * @brief Функция присваивает целочисленное значение переменной
  * @param - сообщение для пользователя
@@ -72,6 +73,13 @@ int task3(const int* const array, const size_t size);
  * @param array указатель на массив
 */
 void free_array(int* array);
+/**
+ * @brief Функция проверяет, что конец больше начала
+ * @param begin начало диапазона
+ * @param end конец диапазона 
+ * @return Если существует true
+*/
+bool CheckRange(const int* const begin, const int* const end);
 /**
  * @brief структура хранит константы, указывающие выбор пользователя заполнить массив
  * @brief User хранит значение, вызывающее ввод массива вручную
@@ -159,10 +167,21 @@ void FillArrayUser(int* const array, const size_t size)
     }
 }
 
+bool CheckRange(const int* const begin, const int* const end)
+{
+  if (begin > end)
+  {
+    return false;
+    abort();
+  }
+  return true;
+}
+
 void FillArrayRandom(int *const array, const size_t size) 
 {
   const int begin = scan_f("Введите нижнюю границу диапазона: "), 
             end = scan_f("Введите верхнюю границу диапазона: ");
+  if (!CheckRange(&begin, &end))
   for (size_t i = 0; i < size; i++)
   {
     array[i] = begin + rand() % (end - begin + 1);
@@ -223,7 +242,6 @@ int task3(const int* const array, const size_t size)
     if (array[i] * array[i + 1] < 0) 
     {
         return i + 1;
-        break;
     }
   }
     printf("%s\n", "Число для 3 задания не найдено");
