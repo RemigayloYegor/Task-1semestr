@@ -45,7 +45,7 @@ void print_array(const int* const  array, const size_t size);
  * @param Copy пустой массив
  * @param size длина массива
 */
-void copy_array(int* const Current, int* Copy, const size_t size);
+void copy_array(int* const current, int* copy, const size_t size);
 /**
  * @brief Функция меняет предпоследний элемент массива на максимальный по модулю.
  * @param array указатель на массив
@@ -161,8 +161,8 @@ void FillArrayUser(int* const array, const size_t size)
 
 void FillArrayRandom(int *const array, const size_t size) 
 {
-  int begin = scan_f("Введите нижнюю границу диапазона: "), 
-      end = scan_f("Введите верхнюю границу диапазона: ");
+  const int begin = scan_f("Введите нижнюю границу диапазона: "), 
+            end = scan_f("Введите верхнюю границу диапазона: ");
   for (size_t i = 0; i < size; i++)
   {
     array[i] = begin + rand() % (end - begin + 1);
@@ -178,18 +178,18 @@ void print_array(const int* const  array, const size_t size)
     }
 }
 
-void copy_array(int* const Current, int* Copy, const size_t size)
+void copy_array(int* const current, int* copy, const size_t size)
 {
     for (size_t i = 0; i < size; i++)
     {
-          Copy[i] = Current[i];
+          copy[i] = current[i];
     }
 }
 
 int *task1( int* array, const size_t size)
 {
-   int temp = 0;
-   for (size_t i = 0; i < size; i = i + 1)
+   int temp = abs(array[0]);
+   for (size_t i = 1; i < size; i++)
      {
        if (abs(array[i]) > temp)
        {
@@ -204,8 +204,9 @@ int *task1( int* array, const size_t size)
 
 int task2(const int* const array, const size_t size)
 {
-  int temp = 0, number = scan_f("Введите число на которое должно делится без остатка: ");
-  for (size_t i = 0; i < size; i = i + 1) 
+  int temp = 0;
+  const int number = scan_f("Введите число на которое должно делится без остатка: ");
+  for (size_t i = 0; i < size; i++) 
   {
     if (array[i] % number == 0)
     {
@@ -217,22 +218,17 @@ int task2(const int* const array, const size_t size)
 
 int task3(const int* const array, const size_t size)
 {
-  int temp = 0, k = 0;
   for (size_t i = 0; i < size - 1 && size >= 2; i++) 
   {
-    if ((array[i] >= 0 && array[i + 1] < 0 ) || (array[i] < 0 && array[i + 1] >= 0)) 
+    if (array[i] * array[i + 1] < 0) 
     {
-        temp = i;
-        k = 1;
+        return i + 1;
         break;
     }
   }
-  if (k == 0)
-  {
     printf("%s\n", "Число для 3 задания не найдено");
     abort();
-  }
-  return temp;
+  
 }
 
 void free_array(int* array)
