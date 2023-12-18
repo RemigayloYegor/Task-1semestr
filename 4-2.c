@@ -4,6 +4,7 @@
 #include <time.h>
 #include <malloc.h>
 #include <math.h>
+#include <stdbool.h>
 /**
  * @brief Функция присваивает целочисленное значение переменной
  * @param - сообщение для пользователя
@@ -53,6 +54,13 @@ void copy_array(int* const current, int* copy, const size_t size);
  * @return колличество четных элементов
 */
 int EvenNumbers(int* const array, const size_t size);
+/**
+ * @brief Функция проверяет, что конец больше начала
+ * @param begin начало диапазона
+ * @param end конец диапазона 
+ * @return Если существует true
+*/
+bool CheckRange(const int* const begin, const int* const end);
 /**
  * @brief Функция меняет предпоследний элемент массива на максимальный по модулю.
  * @param array указатель на массив
@@ -168,10 +176,21 @@ void FillArrayUser(int* const array, const size_t size)
     }
 }
 
+bool CheckRange(const int* const begin, const int* const end)
+{
+  if (begin > end)
+  {
+    return false;
+    abort();
+  }
+  return true;
+}
+
 void FillArrayRandom(int *const array, const size_t size) 
 {
   int begin = scan_f("Введите нижнюю границу диапазона: "), 
       end = scan_f("Введите верхнюю границу диапазона: ");
+  if (!CheckRange(&begin, &end))
   for (size_t i = 0; i < size; i++)
   {
     array[i] = begin + rand() % (end - begin + 1);
