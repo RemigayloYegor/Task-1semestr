@@ -45,7 +45,7 @@ void print_array(const int* const  array, const size_t size);
  * @param Copy пустой массив
  * @param size длина массива
 */
-void copy_array(int* const Current, int* Copy, const size_t size);
+void copy_array(int* const current, int* copy, const size_t size);
 /**
  * @brief Функция считаетс колличество четных элементов, оканчивающихся на ноль в массиве
  * @param array указатель на массив
@@ -200,19 +200,18 @@ int EvenNumbers(int* const array, const size_t size)
 }
 
 
-void copy_array(int* const Current, int* Copy, const size_t size)
+void copy_array(int* const current, int* copy, const size_t size)
 {
     for (size_t i = 0; i < size; i++)
     {
-          Copy[i] = Current[i];
+          copy[i] = current[i];
     }
 }
 
 int *task1( int* array, const size_t size)
 {
-   puts("Массив для Задания 1:");
-   int temp = 0;
-   for (size_t i = 0; i < size; i = i + 1)
+   int temp = abs(array[0]);
+   for (size_t i = 1; i < size; i++)
      {
        if (abs(array[i]) > temp)
        {
@@ -230,7 +229,7 @@ int *task2(int* array, size_t size)
   int k = 0, CountEven = EvenNumbers(array, size), number = scan_f("Введите число которое нужно вставить после всех четных элементов, оканчивающихся на ноль: ");
   puts("Массив для Задания 2:");
   int* new_array = get_array(size + CountEven);
-  for (size_t i = 0; k < size + CountEven; i = i + 1) 
+  for (size_t i = 0; k < size + CountEven; i++) 
   {
     if (array[i] % 10 == 0)
     {
@@ -241,7 +240,7 @@ int *task2(int* array, size_t size)
     else
     {
       new_array[k] = array[i];
-      k = k + 1;
+      k++;
     }
   }
   return new_array;
@@ -254,7 +253,7 @@ int *task3(int* array, const size_t size)
   int temp = 0, k = 0;
   for (size_t i = 0; i < size; i++) 
   {
-    if (i == 0 || i == size-1) 
+    if (i == 0 || i == size - 1) 
     {
       new_array[i] = 0;
     }
