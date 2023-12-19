@@ -77,9 +77,8 @@ void free_array(int* array);
  * @brief Функция проверяет, что конец больше начала
  * @param begin начало диапазона
  * @param end конец диапазона 
- * @return Если существует true
 */
-bool CheckRange(const int* const begin, const int* const end);
+void CheckRange(const int begin, const int end);
 /**
  * @brief структура хранит константы, указывающие выбор пользователя заполнить массив
  * @brief User хранит значение, вызывающее ввод массива вручную
@@ -112,10 +111,13 @@ int main()
           puts("Insert a valid choice!\n");
           return 1;
   }
-  print_array(task1(Array, size), size);
+  int* new_array_1 = get_array(size);
+  copy_array(Array, new_array_1, size);
+  print_array(task1(new_array_1, size), size);
   printf("Second task: %d\n", task2(Array, size));
   printf("third task: %d\n", task3(Array, size));
   free_array(Array);
+  free_array(new_array_1);
   return 0;
 }
 
@@ -167,20 +169,20 @@ void FillArrayUser(int* const array, const size_t size)
     }
 }
 
-bool CheckRange(const int* const begin, const int* const end)
+void CheckRange(const int begin, const int end)
 {
-  if (begin > end)
-  {
-    return false;
-  }
-  return true;
+   if (begin > end)
+   {
+      puts("error ");
+      abort();
+   }
 }
 
 void FillArrayRandom(int *const array, const size_t size) 
 {
   const int begin = scan_f("Введите нижнюю границу диапазона: "), 
             end = scan_f("Введите верхнюю границу диапазона: ");
-  if (!CheckRange(&begin, &end))
+  CheckRange(begin, end);
   for (size_t i = 0; i < size; i++)
   {
     array[i] = begin + rand() % (end - begin + 1);
@@ -214,10 +216,8 @@ int *task1( int* array, const size_t size)
          temp = array[i];
        }
      }
-  int* new_array = get_array(size);
-  copy_array(array, new_array, size);
-  new_array[size - 2] = temp;
-  return new_array;
+  array[size - 2] = temp;
+  return array;
 }
 
 int task2(const int* const array, const size_t size)
