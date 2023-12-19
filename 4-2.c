@@ -58,9 +58,8 @@ int EvenNumbers(int* const array, const size_t size);
  * @brief Функция проверяет, что конец больше начала
  * @param begin начало диапазона
  * @param end конец диапазона 
- * @return Если существует true
 */
-bool CheckRange(const int* const begin, const int* const end);
+void CheckRange(const int begin, const int end);
 /**
  * @brief Функция меняет предпоследний элемент массива на максимальный по модулю.
  * @param array указатель на массив
@@ -74,14 +73,14 @@ int *task1(int* array, const size_t size);
  * @param size размерность массива
  * @return 0
 */
-int *task2(int* array, size_t size);
+int *task2(int* array, int* new_array, const size_t size);
 /**
  * @brief Функция находит номер первой пары соседних элементов с разными знаками.
  * @param array указатель на массив
  * @param size размерность массива
  * @return Итоговый ответ для третьего задания
 */
-int *task3(int* array, const size_t size);
+int *task3(int* array, int* new_array, const size_t size);
 /**
  * @brief Функция, освобождающая массив
  * @param array указатель на массив
@@ -121,10 +120,17 @@ int main()
   }
   puts("Исходный массив:");
   print_array(Array, size);
-  print_array(task1(Array, size), size);
-  print_array(task2(Array, size), size + EvenNumbers(Array, size));
-  print_array(task3(Array, size), size);
+  int* new_array_1 = get_array(size);
+  copy_array(Array, new_array_1, size);
+  print_array(task1(new_array_1, size), size);
+  int* new_array_2 = get_array(size + EvenNumbers(Array, size));
+  print_array(task2(Array, new_array_2, size), size + EvenNumbers(Array, size));
+  int* new_array_3 = get_array(size);
+  print_array(task3(Array, new_array_3, size), size);
   free_array(Array);
+  free_array(new_array_1);
+  free_array(new_array_3);
+  free_array(new_array_3);
   return 0;
 }
 
@@ -176,20 +182,20 @@ void FillArrayUser(int* const array, const size_t size)
     }
 }
 
-bool CheckRange(const int* const begin, const int* const end)
+void CheckRange(const int begin, const int end)
 {
-  if (begin > end)
-  {
-    return false;
-  }
-  return true;
+   if (begin > end)
+   {
+      puts("error ");
+      abort();
+   }
 }
 
 void FillArrayRandom(int *const array, const size_t size) 
 {
   int begin = scan_f("Введите нижнюю границу диапазона: "), 
       end = scan_f("Введите верхнюю границу диапазона: ");
-  if (!CheckRange(&begin, &end))
+  CheckRange(begin, end);
   for (size_t i = 0; i < size; i++)
   {
     array[i] = begin + rand() % (end - begin + 1);
@@ -228,6 +234,7 @@ void copy_array(int* const current, int* copy, const size_t size)
 
 int *task1( int* array, const size_t size)
 {
+   puts("Массив для Задания 1:");
    int temp = abs(array[0]);
    for (size_t i = 1; i < size; i++)
      {
@@ -236,17 +243,14 @@ int *task1( int* array, const size_t size)
          temp = array[i];
        }
      }
-  int* new_array = get_array(size);
-  copy_array(array, new_array, size);
-  new_array[size - 2] = temp;
-  return new_array;
+  array[size - 2] = temp;
+  return array;
 }
 
-int *task2(int* array, size_t size)
+int *task2(int* array, int* new_array, const size_t size)
 {
   int k = 0, CountEven = EvenNumbers(array, size), number = scan_f("Введите число которое нужно вставить после всех четных элементов, оканчивающихся на ноль: ");
   puts("Массив для Задания 2:");
-  int* new_array = get_array(size + CountEven);
   for (size_t i = 0; k < size + CountEven; i++) 
   {
     if (array[i] % 10 == 0)
@@ -264,10 +268,9 @@ int *task2(int* array, size_t size)
   return new_array;
 }
 
-int *task3(int* array, const size_t size)
+int *task3(int* array, int* new_array, const size_t size)
 {
   puts("Массив для Задания 3:");
-  int* new_array = get_array(size);
   int temp = 0, k = 0;
   for (size_t i = 0; i < size; i++) 
   {
