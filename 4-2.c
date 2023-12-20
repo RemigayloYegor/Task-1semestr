@@ -129,7 +129,7 @@ int main()
   print_array(task3(Array, new_array_3, size), size);
   free_array(Array);
   free_array(new_array_1);
-  free_array(new_array_3);
+  free_array(new_array_2);
   free_array(new_array_3);
   return 0;
 }
