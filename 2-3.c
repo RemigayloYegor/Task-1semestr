@@ -51,6 +51,7 @@ int main()
           puts("Insert a valid choice!\n");
           return 1;
   }
+  return 0;
 }
 
 float Radians_Degrees(float corner)
